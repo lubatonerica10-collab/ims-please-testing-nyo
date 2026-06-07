@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Environmental Passkey</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Copperplate, Papyrus, fantasy;
+}
+
+body{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow-y:auto;
+
+    background:
+    linear-gradient(
+        rgba(0,0,0,0.2),
+        rgba(0,0,0,0.2)
+    ),
+    url("bg1.jpg");
+
+    background-size:cover;
+    background-position:center;
+}
+
+/* Floating Stickers */
+
+.sticker{
+    position:absolute;
+    font-size:60px;
+    animation:float 4s infinite ease-in-out;
+}
+
+.s1{top:20px;left:30px;}
+.s2{top:50px;right:40px;}
+.s3{bottom:50px;left:50px;}
+.s4{bottom:40px;right:60px;}
+.s5{top:45%;left:2%;}
+.s6{top:45%;right:2%;}
+.s7{top:20%;left:15%;}
+.s8{top:20%;right:15%;}
+
+@keyframes float{
+    0%,100%{
+        transform:translateY(0);
+    }
+    50%{
+        transform:translateY(-15px);
+    }
+}
+
+/* Main Container */
+
+.container{
+
+    width:90%;
+    max-width:900px;
+
+    text-align:center;
+
+    background:rgba(255,255,255,0.95);
+
+    padding:40px;
+
+    border-radius:30px;
+
+    box-shadow:0 10px 40px rgba(0,0,0,.4);
+}
+
+/* Title */
+
+.title{
+
+    font-size:55px;
+
+    font-weight:900;
+
+    color:#2E7D32;
+
+    margin-bottom:20px;
+}
+
+/* Subtitle */
+
+.subtitle{
+
+    font-size:24px;
+
+    color:#333;
+
+    margin-bottom:30px;
+}
+
+/* Lock */
+
+.lock{
+
+    font-size:120px;
+
+    animation:bounce 1.5s infinite;
+}
+
+@keyframes bounce{
+
+    0%,100%{
+        transform:translateY(0);
+    }
+
+    50%{
+        transform:translateY(-15px);
+    }
+}
+
+/* Code */
+
+.code{
+
+    font-size:120px;
+
+    font-weight:900;
+
+    color:#ff9800;
+
+    letter-spacing:15px;
+
+    text-shadow:
+    3px 3px 0 #fff,
+    6px 6px 10px rgba(0,0,0,.3);
+
+    margin:20px 0;
+}
+
+/* Message */
+
+.message{
+
+    font-size:28px;
+
+    font-weight:bold;
+
+    color:#222;
+
+    line-height:1.5;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="sticker s1">🌍</div>
+<div class="sticker s2">🌱</div>
+<div class="sticker s3">♻️</div>
+<div class="sticker s4">💧</div>
+<div class="sticker s5">☀️</div>
+<div class="sticker s6">🌳</div>
+<div class="sticker s7">🌼</div>
+<div class="sticker s8">🍃</div>
+
+<div class="container">
+
+    <div class="title">
+        🎉 GOOD JOB! 🎉
+    </div>
+
+    <div class="subtitle">
+        You successfully completed the Environmental Health Challenge!
+    </div>
+
+    <div class="lock">
+        🔒
+    </div>
+
+    <div class="code">
+        116
+    </div>
+
+    <div class="message">
+        🌍 Secret Environmental Passkey Unlocked 🌍
+        <br><br>
+        Use this code to continue your adventure!
+    </div>
+
+</div>
+
+</body>
+</html>

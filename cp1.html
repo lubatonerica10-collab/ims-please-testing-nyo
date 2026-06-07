@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HELP</title>
+
+<style>
+body{
+    font-family:Arial,sans-serif;
+    background:url('bg1.jpg') center/cover no-repeat;
+    min-height:100vh;
+    margin:0;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px;
+}
+
+.game{
+    max-width:1200px;
+    width:95%;
+    background:rgba(255,255,255,0.1);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(5px);
+    padding:25px;
+    border-radius:20px;
+    border:1px solid rgba(255,255,255,0.2);
+}
+
+.hint,.lesson{
+    background:white;
+    color:black;
+    padding:15px;
+    border-radius:12px;
+}
+
+#cryptogram{
+    display:flex;
+    flex-wrap:wrap;
+    gap:5px;
+    justify-content:center;
+    margin:20px 0;
+}
+
+.box{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+.letter{
+    width:55px;
+    height:55px;
+    font-size:30px;
+    text-align:center;
+    font-weight:bold;
+    text-transform:uppercase;
+}
+
+.number{
+    background:#111;
+    color:gold;
+    padding:4px 8px;
+    border-radius:8px;
+    margin-top:5px;
+}
+
+.space{
+    width:20px;
+}
+
+button{
+    padding:10px 18px;
+    font-size:18px;
+    cursor:pointer;
+}
+
+#lives{
+    font-size:40px;
+    text-align:center;
+    margin:10px 0;
+}
+
+#msg{
+    text-align:center;
+    margin-top:15px;
+    font-size:20px;
+}
+
+#puzzle{
+    display:none;
+    text-align:center;
+    margin-top:20px;
+}
+
+.board{
+
+    width:400px;
+    height:300px;
+
+    margin:auto;
+
+    display:grid;
+
+    grid-template-columns:200px 200px;
+    grid-template-rows:150px 150px;
+
+    gap:2px;
+}
+
+.piece{
+
+    width:200px;
+    height:150px;
+
+    border:2px solid white;
+
+    cursor:pointer;
+
+    background-image:url('communityhealth.jpg');
+
+    background-size:400px 300px;
+
+    transition:.2s;
+}
+
+.piece:hover{
+
+    transform:scale(1.03);
+}
+
+/* VIDEO */
+#videoBox{
+    display:none;
+    text-align:center;
+    margin-top:40px;
+}
+
+video{
+    width:100%;
+    border-radius:10px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="game">
+
+<h1>🔐 HELP ME</h1>
+
+<div class="hint">
+<b>Hint:</b> It refers to the branch of public health that focuses on how the environment affects people's health and well-being.
+</div>
+
+<div id="lives">❤️❤️❤️</div>
+
+<div id="cryptogram"></div>
+
+<div style="text-align:center">
+    <button onclick="checkAnswer()">CHECK ANSWER</button>
+</div>
+
+<div id="msg"></div>
+
+<div id="lesson" class="lesson" style="display:none"></div>
+
+<!-- NEXT BUTTON -->
+<div style="text-align:center; margin-top:20px;">
+    <button id="nextBtn" onclick="goNext()" style="display:none; background:#00c2ff; color:white; border:none; border-radius:10px;">
+        ➡️ NEXT LEVEL
+    </button>
+</div>
+
+<!-- VIDEO -->
+<div id="videoBox">
+    <h3>📹 Lesson Video</h3>
+
+    <video width="600" controls>
+        <source src="video.mp4.mp4" type="video/mp4">
+    </video>
+
+    <br><br>
+
+    <button onclick="nextPage()">
+        ➡️ CONTINUE
+    </button>
+</div>
+
+<!-- PUZZLE -->
+<div id="puzzle">
+    <h2>🧩 Recovery Puzzle</h2>
+    <p>Arrange the picture correctly to earn another chance.</p>
+
+    <div class="board" id="board"></div>
+</div>
+
+<script>
+
+const answer = "ENVIRONMENT HEALTH";
+let lives = 3;
+
+function num(c){
+    return c.charCodeAt(0) - 64;
+}
+
+function nextPage(){
+    window.location.href = "cp2.html";
+}
+
+function draw(){
+
+    let html='';
+
+    for(let c of answer){
+
+        if(c===' '){
+            html += '<div class="space"></div>';
+        }
+        else{
+            html += `
+            <div class="box">
+                <input maxlength="1" class="letter" data-answer="${c}">
+                <div class="number">${num(c)}</div>
+            </div>`;
+        }
+    }
+
+    document.getElementById('cryptogram').innerHTML = html;
+
+    document.querySelectorAll('.letter').forEach(input=>{
+
+        input.addEventListener('input', function(){
+
+            if(lives <= 0) return;
+
+            let typed = this.value.toUpperCase();
+            let correct = this.dataset.answer;
+
+            this.value = typed;
+
+            if(typed && typed !== correct){
+
+                lives--;
+                updateLives();
+
+                document.getElementById('msg').innerHTML =
+    '❌ Wrong letter!';
+
+                this.value = '';
+
+                if(lives <= 0){
+                    showPuzzle();
+                }
+            }
+
+        });
+
+    });
+
+}
+
+function updateLives(){
+    document.getElementById('lives').innerHTML = '❤️'.repeat(lives);
+}
+
+function checkAnswer(){
+
+    if(lives <= 0) return;
+
+    let inputs = [...document.querySelectorAll('.letter')];
+    let idx = 0;
+    let userAnswer = '';
+
+    for(let c of answer){
+
+        if(c === ' '){
+            userAnswer += ' ';
+        }
+        else{
+            userAnswer += (inputs[idx++].value || '').toUpperCase();
+        }
+    }
+
+    if(userAnswer === answer){
+
+        document.getElementById('msg').innerHTML =
+            '✅ Correct! ENVIRONMENT HEALTH';
+
+        document.getElementById('lesson').style.display = 'block';
+
+        document.getElementById('lesson').innerHTML = `
+
+        <h2>🌍 Environmental Health</h2>
+
+        <p>
+        Environmental Health is the branch of public health that focuses on how the environment affects human health and well-being. It involves identifying, assessing, and controlling environmental factors that may affect health.
+        </p>
+
+        <p>
+        These environmental factors include air quality, water quality, food safety, sanitation, waste management, housing conditions, climate change, and exposure to harmful chemicals. Environmental health aims to create safe, clean, and healthy surroundings where people can live, learn, work, and play.
+        </p>
+
+        <h3>⭐ Why is Environmental Health Important?</h3>
+
+        <ul>
+            <li>Prevents diseases caused by pollution and environmental hazards.</li>
+            <li>Ensures access to clean air and safe drinking water.</li>
+            <li>Promotes proper sanitation and waste disposal.</li>
+            <li>Protects people from harmful chemicals and toxins.</li>
+            <li>Reduces the spread of infectious diseases.</li>
+            <li>Creates healthier homes, schools, and communities.</li>
+            <li>Improves quality of life and overall well-being.</li>
+            <li>Supports sustainable development for future generations.</li>
+        </ul>
+
+        <h3>🌱 Examples of Environmental Health Practices</h3>
+
+        <ul>
+            <li>Proper waste segregation and disposal.</li>
+            <li>Keeping surroundings clean.</li>
+            <li>Reducing air and water pollution.</li>
+            <li>Planting trees and protecting natural resources.</li>
+            <li>Conserving water and energy.</li>
+            <li>Maintaining proper hygiene and sanitation.</li>
+        </ul>
+
+        <p>
+        Environmental Health is everyone's responsibility. By protecting our environment, we also protect our health and the health of future generations.
+        </p>
+
+        `;
+
+        document.getElementById('nextBtn').style.display = 'inline-block';
+    }
+    else{
+        document.getElementById('msg').innerHTML =
+            '⚠️ Keep filling in the correct letters.';
+    }
+}
+
+/* NEXT BUTTON → SHOW VIDEO */
+function goNext(){
+    document.getElementById('videoBox').style.display = 'block';
+    document.getElementById('videoBox').scrollIntoView({behavior:'smooth'});
+}
+
+/* =========================
+   RECOVERY PUZZLE
+========================= */
+
+let order = [2,0,3,1];
+let selected = null;
+
+function showPuzzle(){
+
+    document.getElementById("puzzle").style.display = "block";
+
+    renderPuzzle();
+}
+
+function renderPuzzle(){
+
+    const board = document.getElementById("board");
+
+    board.innerHTML = "";
+
+    const positions = [
+        [0,0],
+        [1,0],
+        [0,1],
+        [1,1]
+    ];
+
+    order.forEach((piece,index)=>{
+
+        const div = document.createElement("div");
+
+        div.className = "piece";
+
+        div.style.backgroundPosition =
+        `${-positions[piece][0]*200}px ${-positions[piece][1]*150}px`;
+
+        div.onclick = () => swapPiece(index);
+
+        board.appendChild(div);
+
+    });
+
+}
+
+function swapPiece(index){
+
+    if(selected === null){
+
+        selected = index;
+
+        return;
+    }
+
+    [order[selected], order[index]] =
+    [order[index], order[selected]];
+
+    selected = null;
+
+    renderPuzzle();
+
+    if(order.join(",") === "0,1,2,3"){
+
+        lives = 3;
+
+        updateLives();
+
+        document.getElementById("msg").innerHTML =
+        "🎉 Puzzle Solved! You earned another chance!";
+
+        document.getElementById("puzzle").style.display = "none";
+
+        order = [2,0,3,1];
+
+        draw();
+    }
+}
+
+draw();
+
+</script>
+
+</body>
+</html>
